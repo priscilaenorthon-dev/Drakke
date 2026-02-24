@@ -114,7 +114,7 @@ Gerencia tudo que acontece **dentro da unidade operacional** após o embarque. �
 **Tarefas operacionais a bordo**:
 - **Definir horário de trabalho**: Atribuir turno (dia: 06h-18h ou noite: 18h-06h) a cada pessoa a bordo.
 - **Definir local de operação**: Onde na plataforma o trabalhador está alocado.
-- **Evento na unidade** (`unit_events`): Registrar ocorrências — acidentes, incidentes, simulados, inspeções, paradas, etc. Campos: tipo, data/hora, descrição, envolvidos, gravidade, ações tomadas.
+- **Evento na unidade** (`unit_events`): Registrar ocorrências — acidentes, incidentes, simulados, inspeções, paradas, etc. Campos: tipo, data/hora início, data/hora encerramento (`ended_at`), descrição, envolvidos, gravidade, ações tomadas, status (em andamento, encerrado, cancelado), motivo de encerramento (`end_reason`), usuário que encerrou (`ended_by`). Eventos com status "em andamento" podem ser **encerrados/parados** pelo operador a qualquer momento, registrando automaticamente data/hora e usuário responsável.
 - **Informar horas extras** (`overtime_records`): Registrar horas extras trabalhadas, com justificativa.
 - **Realocar contrato a bordo**: Mover trabalhador de um contrato para outro sem desembarcar.
 - **Realocar função a bordo**: Mudar a função do trabalhador temporariamente (ex: mecânico assumindo como eletricista).
@@ -178,8 +178,9 @@ Gerencia operações diárias, equipes de trabalho, planejamento de tarefas e to
 
 **Planejamento de tarefas**: Sub-módulo para gestão de atividades operacionais na plataforma.
 - **Plano de tarefa** (`task_plans`): Plano macro com conjunto de tarefas. Campos: nome, UOP, contrato, período, status.
-- **Tarefas** (`tasks`): Atividades individuais. Campos: classificação (tipo, categoria, característica), TAG (identificador do equipamento/local), criticidade da TAG, disciplina (mecânica, elétrica, instrumentação, civil, etc.), critérios de atividade, equipe necessária, duração estimada, status.
+- **Tarefas** (`tasks`): Atividades individuais. Campos: classificação (tipo, categoria, característica), TAG (identificador do equipamento/local), criticidade da TAG, disciplina (mecânica, elétrica, instrumentação, civil, etc.), critérios de atividade, equipe necessária, duração estimada, data/hora de início real (`started_at`), data/hora de parada (`stopped_at`), motivo de parada (`stop_reason`), usuário que parou (`stopped_by`), status (agendada, em andamento, concluída, cancelada, interrompida).
 - **Planejador de tarefas** (`task_planner`): Tela visual (tipo Kanban ou Gantt) para programar e acompanhar tarefas, com indicadores de compromissos criados.
+- **Parar atividade em andamento**: Ação disponível para qualquer tarefa com status "em andamento". Ao acionar "Parar Atividade", o sistema exige preenchimento obrigatório de motivo de parada, registra automaticamente data/hora da parada e usuário responsável, atualiza o status da tarefa para "interrompida" e notifica os membros da equipe vinculada. A tela "Atividades em Andamento" lista em tempo real todas as tarefas com status "em andamento" na UOP, permitindo localizar e parar rapidamente qualquer atividade em curso.
 
 **Serviços terceirizados — RST (Requisição de Serviço Terceirizado)**: Este é o fluxo principal de interação com fornecedores via iDrake Suppliers.
 
@@ -199,7 +200,7 @@ Gerencia operações diárias, equipes de trabalho, planejamento de tarefas e to
 
 **Tela de inconsistências**: Identifica discrepâncias entre embarques/desembarques registrados no Drake e os reportados pelo fornecedor, permitindo conciliação.
 
-**Tabelas**: `teams`, `team_members`, `task_plans`, `tasks`, `task_classifications`, `task_disciplines`, `task_criteria`, `tag_criticalities`, `service_requests`, `service_request_items`, `service_request_members`, `service_request_validations`, `service_request_attendances`, `work_authorizations`, `coverage_requests`, `coverage_request_reasons`, `requesting_areas`, `validation_groups`, `refusal_reasons`, `service_priorities`, `service_types`, `third_party_authorization_types`.
+**Tabelas**: `teams`, `team_members`, `task_plans`, `tasks`, `task_stops`, `task_classifications`, `task_disciplines`, `task_criteria`, `tag_criticalities`, `service_requests`, `service_request_items`, `service_request_members`, `service_request_validations`, `service_request_attendances`, `work_authorizations`, `coverage_requests`, `coverage_request_reasons`, `requesting_areas`, `validation_groups`, `refusal_reasons`, `service_priorities`, `service_types`, `third_party_authorization_types`.
 
 ### Módulo 8 — SMS (sistema de gestão de segurança)
 
